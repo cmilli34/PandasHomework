@@ -10,7 +10,7 @@ import numpy as np
 
 purchase_data = pd.read_csv("purchase_data2.csv")
 
-print(purchase_data.head())
+#print(purchase_data.head())
 
 
 
@@ -52,17 +52,38 @@ print(purchase_analysis)
 
 
 #Gender Demographics
-#Count of genders that purchased
+
+#make a new dataframe that doesn't store duplicate sns. find the counts of each gender and percent w this new df
+unique_gender = pd.unique(purchase_data[['SN','Gender']])
+print(unique_gender)
+
+#Count of genders that purchased (use above variable for gender count and gender percent)
 gender_count = purchase_data['Gender'].value_counts()
-print(gender_count)
+#print(gender_count)
 
 #Percentage of genders
-gender_percent = purchase_data['Gender'].value_counts('Female') * 100
-#how did adding a string to the method make them all turn into percents????
+gender_percent = purchase_data['Gender'].value_counts(2) * 100
+#how did adding an integer to the value_counts() method make them all turn into percents???? Is this a bug?
+#either way it gave me what I'm looking for
+
+#round the percent to two decimal places
 gender_percent_rounded = round(gender_percent, 2)
-print(gender_percent_rounded)
+#print(gender_percent_rounded)
 
 #make a dataframe to put the total and percent next to each other for each gender
-#gender_demographics = pd.DataFrame()
+gender_demographics = pd.DataFrame({"Count": gender_count, "Percent": gender_percent_rounded})
+print(gender_demographics)
+
+
+#Purchasing Analysis (Gender)
+
+#make three segmented dataframes that hold information on only males, only females, and only others
+
+#run a purchase count function on each segmented df, make three variables to store
+
+#do a mean function on price for each segmented df, make three variables to store
+
+#run sum function for each segmented df, make three variables to store
+
 
 
