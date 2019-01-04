@@ -63,7 +63,7 @@ gender_count = unique_gender['Gender'].value_counts()
 #Percentage of genders
 gender_percent = unique_gender['Gender'].value_counts(2) * 100
 #how did adding an integer to the value_counts() method make them all turn into percents???? Is this a bug?
-#either way it gave me what I'm looking for
+#Even if you add in a string or boolean it gives a percent. either way it gave me what I'm looking for
 
 #round the percent to two decimal places
 gender_percent_rounded = round(gender_percent, 2)
@@ -76,12 +76,47 @@ print(gender_demographics)
 #Purchasing Analysis (Gender)
 
 #make three segmented dataframes that hold information on only males, only females, and only others
+is_female = purchase_data['Gender'] == 'Female'
+females = purchase_data[is_female]
+
+is_male = purchase_data['Gender'] == 'Male'
+males = purchase_data[is_male]
+
+is_other = purchase_data['Gender'] == 'Other / Non-Disclosed'
+other = purchase_data[is_other]
 
 #run a purchase count function on each segmented df, make three variables to store
+female_purchase = females['Gender'].value_counts()
+
+male_purchase = males['Gender'].value_counts()
+
+other_purchase = other['Gender'].value_counts()
 
 #do a mean function on price for each segmented df, make three variables to store
 
+female_mean = round(np.mean(females['Price']), 2)
+
+male_mean = round(np.mean(males['Price']), 2)
+
+other_mean = round(np.mean(other['Price']), 2)
+
 #run sum function for each segmented df, make three variables to store
 
+female_sum = sum(females['Price'])
+print(female_sum)
 
+male_sum = sum(males['Price'])
 
+other_sum = sum(other['Price'])
+
+#find avg total per person, make three var to store
+
+female_avg_person = round(female_sum/len(females['SN'].unique()), 2)
+
+male_avg_person = round(male_sum/len(males['SN'].unique()), 2)
+
+other_avg_person = round(other_sum/len(other['SN'].unique()), 2)
+print(other_avg_person)
+
+#store in DF
+#gender_pruchase = pd.DataFrame({})
