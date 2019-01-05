@@ -103,7 +103,6 @@ other_mean = round(np.mean(other['Price']), 2)
 #run sum function for each segmented df, make three variables to store
 
 female_sum = sum(females['Price'])
-print(female_sum)
 
 male_sum = sum(males['Price'])
 
@@ -116,7 +115,17 @@ female_avg_person = round(female_sum/len(females['SN'].unique()), 2)
 male_avg_person = round(male_sum/len(males['SN'].unique()), 2)
 
 other_avg_person = round(other_sum/len(other['SN'].unique()), 2)
-print(other_avg_person)
 
 #store in DF
-#gender_pruchase = pd.DataFrame({})
+summary_purchase = {"Purchase Count": [female_purchase, male_purchase, other_purchase], 
+"Average Purchase Price": [female_mean, male_mean, other_mean],
+"Total Purchase Value": [female_sum, male_sum, other_sum], 
+"Average Total Purchase Per Person": [female_avg_person, male_avg_person, other_avg_person]}
+
+gender_purchase_analysis = pd.DataFrame(summary_purchase, index = ['Female', 'Male', 'Other/Non-Disclosed'])
+print(gender_purchase_analysis)
+#revisit this df in jupyter to be sure it looks ok 
+
+
+#Age Demographics
+#Establish bins for ages (<10, 10-14, 15-19, 20-24, 25-29, 30-34, 35-39, 40+)
