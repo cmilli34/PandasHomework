@@ -94,8 +94,6 @@ gender_summary_purchase = pd.DataFrame({"Purchase Count": total_genders_count,
 "Average Purchase Price": genders_mean,
 "Total Purchase Value": genders_sum, 
 "Average Total Purchase Per Person": avg_per_person_genders})
-
-#index = ['Female', 'Male', 'Other/Non-Disclosed']
 print(gender_summary_purchase)
 #revisit this df in jupyter to be sure it looks ok 
 
@@ -130,7 +128,6 @@ labels= ['<10', '10-14', '15-19', '20-24', '25-29', '30-34', '35-39', '40+'])
 
 #make a groupby dataframe to make it quicker to manipulate all of the age ranges
 age_range_group = purchase_data.groupby('Age Range')
-print(age_range_group)
 
 #Run basic calculations to obtain purchase count
 total_agerange_count = age_range_group['Age Range'].count()
@@ -189,15 +186,18 @@ item_sum = item_group['Price'].sum()
 
 #Item Price
 item_price = item_sum/item_count
-print(item_price)
 
 item_price2 = item_group['Price'].unique()
-print(item_price2)
 #ask which variable I should use 
 
 #Create a summary data frame to hold the results, descending order, print head
-item_analysis = pd.DataFrame({"Purchase Count": item_sum, "Item Price": item_price, 
+item_popularity = pd.DataFrame({"Purchase Count": item_sum, "Item Price": item_price, 
+"Total Purchase Value": item_sum}).sort_values(by = ['Purchase Count'], ascending = False)
+print(item_popularity.head())
+
+
+
+#Most Profitable items
+item_profitability = pd.DataFrame({"Purchase Count": item_sum, "Item Price": item_price, 
 "Total Purchase Value": item_sum}).sort_values(by = ['Total Purchase Value'], ascending = False)
-print(item_analysis.head())
-
-
+print(item_profitability.head())
