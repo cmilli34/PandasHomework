@@ -45,9 +45,9 @@ total_revenue_rounded = round(total_revenue, 2)
 
 #Create a summary data frame to hold the results
 purchase_analysis = pd.DataFrame([{"Number of Unique Items": total_items, "Average Price": avg_price_rounded, 
-"Number of Purchases": total_purchases, "Total Revenue": total_revenue}])
+"Number of Purchases": total_purchases, "Total Revenue": total_revenue}], 
+columns=['Number of Unique Items','Average Price','Number of Purchases', 'Total Revenue'])
 print(purchase_analysis)
-#need to unsort the titles
 
 
 
@@ -95,7 +95,6 @@ gender_summary_purchase = pd.DataFrame({"Purchase Count": total_genders_count,
 "Total Purchase Value": genders_sum, 
 "Average Total Purchase Per Person": avg_per_person_genders})
 print(gender_summary_purchase)
-#revisit this df in jupyter to be sure it looks ok 
 
 
 
@@ -191,7 +190,7 @@ item_price2 = item_group['Price'].unique()
 #ask which variable I should use 
 
 #Create a summary data frame to hold the results, descending order, print head
-item_popularity = pd.DataFrame({"Purchase Count": item_sum, "Item Price": item_price, 
+item_popularity = pd.DataFrame({"Purchase Count": item_count, "Item Price": item_price, 
 "Total Purchase Value": item_sum}).sort_values(by = ['Purchase Count'], ascending = False)
 print(item_popularity.head())
 
