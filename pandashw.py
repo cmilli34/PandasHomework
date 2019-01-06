@@ -75,57 +75,79 @@ print(gender_demographics)
 
 #Purchasing Analysis (Gender)
 
-#make three segmented dataframes that hold information on only males, only females, and only others
-is_female = purchase_data['Gender'] == 'Female'
-females = purchase_data[is_female]
+#groupby dataframe
+genders = purchase_data.groupby('Gender')
 
-is_male = purchase_data['Gender'] == 'Male'
-males = purchase_data[is_male]
+#run a purchase count function on groupby df
+total_genders_count = genders['Gender'].count()
 
-is_other = purchase_data['Gender'] == 'Other / Non-Disclosed'
-other = purchase_data[is_other]
-
-#run a purchase count function on each segmented df, make three variables to store
-female_purchase = females['Gender'].value_counts()
-
-male_purchase = males['Gender'].value_counts()
-
-other_purchase = other['Gender'].value_counts()
-
-#do a mean function on price for each segmented df, make three variables to store
-
-female_mean = round(np.mean(females['Price']), 2)
-
-male_mean = round(np.mean(males['Price']), 2)
-
-other_mean = round(np.mean(other['Price']), 2)
+#do a mean function on price for genders
+genders_mean = round(genders['Price'].mean(), 2)
 
 #run sum function for each segmented df, make three variables to store
-
-female_sum = sum(females['Price'])
-
-male_sum = sum(males['Price'])
-
-other_sum = sum(other['Price'])
+genders_sum = genders['Price'].sum()
 
 #find avg total per person, make three var to store
-
-female_avg_person = round(female_sum/len(females['SN'].unique()), 2)
-
-male_avg_person = round(male_sum/len(males['SN'].unique()), 2)
-
-other_avg_person = round(other_sum/len(other['SN'].unique()), 2)
+avg_per_person_genders = round(genders_sum/gender_count, 2)
 
 #store in DF
-summary_purchase = {"Purchase Count": [female_purchase, male_purchase, other_purchase], 
-"Average Purchase Price": [female_mean, male_mean, other_mean],
-"Total Purchase Value": [female_sum, male_sum, other_sum], 
-"Average Total Purchase Per Person": [female_avg_person, male_avg_person, other_avg_person]}
+gender_summary_purchase = pd.DataFrame({"Purchase Count": total_genders_count, 
+"Average Purchase Price": genders_mean,
+"Total Purchase Value": genders_sum, 
+"Average Total Purchase Per Person": avg_per_person_genders})
 
-gender_purchase_analysis = pd.DataFrame(summary_purchase, index = ['Female', 'Male', 'Other/Non-Disclosed'])
-print(gender_purchase_analysis)
+#index = ['Female', 'Male', 'Other/Non-Disclosed']
+print(gender_summary_purchase)
 #revisit this df in jupyter to be sure it looks ok 
 
 
+
+
 #Age Demographics
+
+#make a frame that finds the unique screennames and the ages corresponding
+unique_age = pd.DataFrame(purchase_data[['SN', 'Age']]).drop_duplicates()
+
 #Establish bins for ages (<10, 10-14, 15-19, 20-24, 25-29, 30-34, 35-39, 40+)
+age_range= pd.cut(unique_age['Age'], [0, 9, 14, 19, 24, 29, 34, 39, 45],
+labels= ['<10', '10-14', '15-19', '20-24', '25-29', '30-34', '35-39', '40+'])
+
+#Calculate the numbers and percentages by age group. Need to fix the setup of bins and put the <10 at top
+count_age = age_range.value_counts()
+percentage_age = round(age_range.value_counts(2), 4) * 100
+
+#Create a summary data frame to hold the results and print
+age_df = pd.DataFrame({"Count": count_age, "Percent": percentage_age}).sort_index()
+print(age_df)
+
+
+
+
+#Purchasing Analysis (Age)
+
+#Create a new column to og dataframe that will show the age ranges of each category. Duplicates don't matter here.
+purchase_data['Age Range'] = pd.cut(purchase_data['Age'], [0, 9, 14, 19, 24, 29, 34, 39, 45],
+labels= ['<10', '10-14', '15-19', '20-24', '25-29', '30-34', '35-39', '40+'])
+
+#make a groupby dataframe to make it quicker to manipulate all of the age ranges
+age_range_group = purchase_data.groupby('Age Range')
+print(age_range_group)
+
+#Run basic calculations to obtain purchase count
+total_agerange_count = age_range_group['Age Range'].count()
+
+# avg. purchase price
+age_group_mean = round(age_range_group['Price'].mean(), 2)
+ 
+#total purchase value
+age_group_sum = age_range_group['Price'].sum()
+
+# avg. purchase total per person
+avg_per_person_agerange = round(age_group_sum/count_age, 2)
+
+#Create a summary data frame to hold the results
+purchasing_analysis_agerange = pd.DataFrame({"Purchase Count": total_agerange_count, 
+"Average Purchase Price": age_group_mean, "Total Purchase Value": age_group_sum, 
+"Avg Total Purchase Per Person": avg_per_person_agerange}).sort_index()
+
+print(purchasing_analysis_agerange)
