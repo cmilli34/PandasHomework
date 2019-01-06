@@ -28,7 +28,6 @@ print(total_unique_players)
 
 
 #Purchasing Analysis (Total)
-
 #Run basic calculations to obtain number of unique items. Similar approach to finding the number of unique players
 unique_items = pd.unique(purchase_data['Item ID'])
 total_items = len(unique_items)
@@ -51,11 +50,10 @@ print(purchase_analysis)
 #need to unsort the titles
 
 
-#Gender Demographics
 
+#Gender Demographics
 #make a new dataframe that doesn't store duplicate sns. find the counts of each gender and percent w this new df
 unique_gender = pd.DataFrame(purchase_data[['SN', 'Gender']]).drop_duplicates()
-
 
 #Count of genders that purchased (use above variable for gender count and gender percent)
 gender_count = unique_gender['Gender'].value_counts()
@@ -73,8 +71,9 @@ gender_demographics = pd.DataFrame({"Count": gender_count, "Percent": gender_per
 print(gender_demographics)
 
 
-#Purchasing Analysis (Gender)
 
+
+#Purchasing Analysis (Gender)
 #groupby dataframe
 genders = purchase_data.groupby('Gender')
 
@@ -149,5 +148,56 @@ avg_per_person_agerange = round(age_group_sum/count_age, 2)
 purchasing_analysis_agerange = pd.DataFrame({"Purchase Count": total_agerange_count, 
 "Average Purchase Price": age_group_mean, "Total Purchase Value": age_group_sum, 
 "Avg Total Purchase Per Person": avg_per_person_agerange}).sort_index()
-
 print(purchasing_analysis_agerange)
+
+
+
+
+#Top Spenders
+#groupby function in terms of SN
+sn_group = purchase_data.groupby('SN')
+
+#count of each sn purchases
+count_SN_purchase = sn_group['SN'].count()
+
+#average purchase value
+avg_sn_purchase = round(sn_group['Price'].mean(), 2)
+
+#sum of how much each sn purchase
+sum_sn_purchase = sn_group['Price'].sum()
+
+#store variables in df, ascending order by total purchase value, only display top 5
+user_purchases = pd.DataFrame({"Purchase Count": count_SN_purchase, "Average Purchase Size": avg_sn_purchase, 
+"Total Purchase Value": sum_sn_purchase,}).sort_values(by = ['Total Purchase Value'], ascending = False)
+print(user_purchases.head())
+
+
+
+
+#Most popular items
+#Retrieve the Item ID, Item Name, and Item Price columns
+items_purchased = pd.DataFrame(purchase_data[['Item ID', 'Item Name', 'Price']])
+
+#Group by Item ID and Item Name
+item_group = items_purchased.groupby(['Item ID', 'Item Name'])
+
+#Purchase count
+item_count = item_group['Item ID'].count()
+
+#Total Purchase Value
+item_sum = item_group['Price'].sum()
+
+#Item Price
+item_price = item_sum/item_count
+print(item_price)
+
+item_price2 = item_group['Price'].unique()
+print(item_price2)
+#ask which variable I should use 
+
+#Create a summary data frame to hold the results, descending order, print head
+item_analysis = pd.DataFrame({"Purchase Count": item_sum, "Item Price": item_price, 
+"Total Purchase Value": item_sum}).sort_values(by = ['Total Purchase Value'], ascending = False)
+print(item_analysis.head())
+
+
